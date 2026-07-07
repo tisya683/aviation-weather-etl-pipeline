@@ -13,9 +13,9 @@ This project is my way of closing that gap by building a real, end-to-end automa
 
 ## API
 
-Data is sourced from the AviationWeather.gov METAR API.
+Data is sourced from :[Aviation Weather API](https://aviationweather.gov/help/data/#metar)
 
-Per the Federal Meteorological Handbook No. 1, a METAR (Meteorological Aerodrome Report) contains wind, visibility, runway visual range, present weather, sky condition, temperature, dew point, and altimeter setting — collectively "the body of the report" — plus optional coded/plain-language remarks appended after it. Each report is tied to a 4-character ICAO airport code.
+Per the Federal Meteorological Handbook No. 1, a METAR (Meteorological Aerodrome Report) contains wind, visibility, runway visual range, present weather, sky condition, temperature, dew point, and altimeter setting.Each report is tied to a 4-character ICAO airport code.
 
 Airports covered:
 - WSSS (Changi)
@@ -40,11 +40,11 @@ flowchart LR
     AF -.-> DB
 ```
 
-1.Extract — Pull the latest METAR report for each of the 3 ICAO codes from the AviationWeather.gov API.
-2.Clean — Parse the raw METAR string, handle missing/malformed fields, and deduplicate reports (see Challenges).
-3.Transform — Convert coded values (wind, visibility, sky condition, altimeter, etc.) into structured, analysis-ready fields.
-4.Load — Write the transformed records into a local PostgreSQL instance.
-5.Visualise — During development, Tableau Desktop connects to the local PostgreSQL database to display the latest weather observations.
+1. Extract — Pull the latest METAR report for each of the 3 ICAO codes from the AviationWeather.gov API.
+2. Clean — Parse the raw METAR string, handle missing/malformed fields, and deduplicate reports (see Challenges).
+3. Transform — Convert coded values (wind, visibility, sky condition, altimeter, etc.) into structured, analysis-ready fields.
+4. Load — Write the transformed records into a local PostgreSQL instance.
+5. Visualise — During development, Tableau Desktop connects to the local PostgreSQL database to display the latest weather observations.
 
 <img width="971" height="631" alt="image" src="https://github.com/user-attachments/assets/de434ad5-0223-42b2-b13f-d488044ff3b7" />
 
