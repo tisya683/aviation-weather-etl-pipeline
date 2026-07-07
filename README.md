@@ -1,8 +1,9 @@
 # aviation weather ETL pipeline
 
-During an operations internship in the ferry transport industry,I worked on preparing operational data for Power BI dashboards. Although I was involved in cleaning and transforming data, the underlying database and refresh processes were managed by another team, so I could not explore workflow automation.
+During an operations internship in the ferry transport industry, I worked on preparing operational data for Power BI dashboards. The process of extracting, cleaning, and visualising the data was largely manual and disconnected. It was difficult to introduce automation because the underlying database and refresh processes were outsourced, limiting my ability to explore workflow automation. The main challenge was ensuring that the data powering the visualisations remained relevant and continuously updated.
 
-This project is my way of closing that gap by building a real, end-to-end automated ETL pipeline from scratch, using a similarly operations-heavy dataset (aviation weather) so the skills would transfer directly back to that domain.
+This project is my way of addressing that gap by building a complete end-to-end ETL pipeline from scratch. I chose aviation weather data because it is similarly operations-focused and requires continuous updates, allowing me to develop skills that transfer directly to operational analytics and data engineering workflows.
+
 
 ## Table of Contents 
 - API
