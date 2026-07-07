@@ -1,19 +1,17 @@
-# aviation weather etl pipeline
+# aviation weather ETL pipeline
 
 During an operations internship in the ferry transport industry,I worked on preparing operational data for Power BI dashboards. Although I was involved in cleaning and transforming data, the underlying database and refresh processes were managed by another team, so I could not explore workflow automation.
 
 This project is my way of closing that gap by building a real, end-to-end automated ETL pipeline from scratch, using a similarly operations-heavy dataset (aviation weather) so the skills would transfer directly back to that domain.
 
 ## Table of Contents 
--API
--Overview of Project
--How to Use
--Initial Challenges 
--Tech Stack
--Future Improvements 
+- API
+- Overview of Project
+- Challenges 
+- Tech Stack
+- Future Improvements 
 
 ## API
-According to the Federal Meteorological Handbook volume one:
 
 Data is sourced from the AviationWeather.gov METAR API.
 
@@ -28,17 +26,19 @@ I limited the scope to these 3 airports because intermediate data is passed betw
 
 ## Overview of Project
 
-Overview
-
 The pipeline runs on an hourly schedule via Airflow and performs the following steps:
 
-'''mermaid
-    SequenceDiagram;
-    A[Metar API]->B[Clean and Transform];
-    B->C(Load into PostgreSQL);
-    C->D(Airflow for Orchestration);
-    D->E(Tableau for Visualisation);
-    '''
+```mermaid
+flowchart LR
+    API["AviationWeather.gov API"] --> EX["Extract (Python)"]
+    EX --> CL["Clean & Transform (Pandas)"]
+    CL --> DB["PostgreSQL"]
+    DB --> TB["Tableau Dashboard"]
+
+    AF["Apache Airflow<br/>(Hourly Scheduler)"] -. Orchestrates .-> EX
+    AF -.-> CL
+    AF -.-> DB
+```
 
 1.Extract — Pull the latest METAR report for each of the 3 ICAO codes from the AviationWeather.gov API.
 2.Clean — Parse the raw METAR string, handle missing/malformed fields, and deduplicate reports (see Challenges).
