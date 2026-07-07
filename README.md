@@ -68,5 +68,4 @@ Airflow's XCom is meant for small metadata payloads, not bulk data transfer. Thi
 - Deploy PostgreSQL on a cloud service for remote access
 - Replace XCom data passing with object storage for larger datasets
 - Add data quality validation using Great Expectations
-- Deploy the Airflow instance to a cloud environment
 - Implement monitoring and alerting for failed pipeline runs
