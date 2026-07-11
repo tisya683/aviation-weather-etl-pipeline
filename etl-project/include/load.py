@@ -1,5 +1,6 @@
 import pandas as pd
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine,MetaData,Table
+from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.engine import URL
 import os
 import logging 
@@ -28,9 +29,30 @@ def get_connection():
 
 # load dataframe
 def load_dataframe(df,engine):
-   try:
-       
-      df.to_sql(
+    try:
+        metadata=MetaData() # empty container that holds info about db's table strucutre
+        table=Table("weather_hourly",metadata,autoload_with=engine) #connects to postggres db & reads the current structure of weather hourly table 
+        records=df.to_dict(orient="records")#sqlalchemy expects dict so convert it first 
+
+        update_cols=[c for c in df.columns if c !="unique_id"] #overwrite other cols if unique_id alrdy exists 
+        with engine.begin() as conn:
+            for record in records:
+                input=insert(table).values(**record) #asterisk unpacks dict into seperate keyword argeuments 
+                input=input.on_conflict_do_update(
+                    index_elements=["unique_id"],
+                    set_={col: input.excluded[col] for col in update_cols}) #excluded is the new row that is conflicted 
+                conn.execute(input)
+        logger.info(f"no. of rows added:{len(df)}")
+
+    except Exception:
+        logger.exception("Failed to load data into PostgreSQL")  
+        raise
+
+    return df
+      
+      
+      
+'''df.to_sql(
          name='weather_hourly',
          con=engine,
          if_exists='append',
@@ -39,11 +61,11 @@ def load_dataframe(df,engine):
       logger.info(f"no.of rows added:{len(df)}")
    
    except Exception:
-      logger.exception("Failed to load data into PostgreSQL")
+      logger.exception("Failed to load data into PostgreSQL")  
       raise
 
    return df
-
+'''
 '''if __name__=='__main__':
     try:
       engine=get_connection()
