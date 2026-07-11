@@ -64,6 +64,7 @@ flowchart LR
    and if a duplicate were to be loaded, the pre-exisitng row's values should be updated with the new data instead of inserting second row.
 
 4. **XCom Size Limits**
+   
 Airflow's XCom is meant for small metadata payloads, not bulk data transfer. This constrained how many airports/how much history I could pass between tasks in a single DAG run, which directly shaped the decision to scope this to 3 airports (see Data Source).
 
 ## Tech Stack
