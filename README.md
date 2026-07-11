@@ -60,8 +60,7 @@ flowchart LR
 
    <img width="1423" height="226" alt="image" src="https://github.com/user-attachments/assets/f74c19d0-d42b-4981-9782-e4a85930f92e" />
 
-   When creating the dashboard in Tableau, I realized that there were duplicates in the data. Since I had already created the unique_id in the transform step, it was easier for me to check Postgres for any duplicates and then implement a constraint preventing more than one row with the    same unique_id from being in the table. However, this led to failures in the Airflow runs, since my pre-existing load function simply appended to the database. From SQLAlchemy, I imported MetaData and Table so that SQLAlchemy could check my table's validation rules,
-   and if a duplicate were to be loaded, the pre-exisitng row's values should be updated with the new data instead of inserting second row.
+   When creating the dashboard in Tableau, I realized that there were duplicates in the data. The root cause was a mismatch between the etl's fetch schedule and each airport's actual update cadence. Since I had already created the unique_id in the transform step, it was easier for me      to check Postgres for any duplicates and then implement a constraint preventing more than one row with the same unique_id from being in the table. However, this led to failures in the Airflow runs, since my pre-existing load function simply appended to the database. From                SQLAlchemy, I imported MetaData and Table so that SQLAlchemy could check my table's validation rules,and if a duplicate were to be loaded, the pre-exisitng row's values should be updated with the new data instead of inserting second row.
 
 4. **XCom Size Limits**
    
@@ -76,7 +75,7 @@ flowchart LR
 
 
 ## Future Improvements
-- Deploy PostgreSQL on a cloud service for remote access
+- Deploy PostgreSQL on a cloud service for remote access (Tableau can maintain a continuous live dashboard instead of manual refreshes)
 - Replace XCom data passing with object storage for larger datasets
 - Add data quality validation using Great Expectations
 - Implement monitoring and alerting for failed pipeline runs
