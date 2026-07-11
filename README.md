@@ -51,9 +51,18 @@ flowchart LR
 
 ## Initial Challenges 
 
-<Talk about duplicate handling >
+1. **Type consistency**
+   <img width="1403" height="546" alt="image" src="https://github.com/user-attachments/assets/1f8cfdf4-73b7-4cf9-8dac-28eac2860c76" />
 
-2. XCom Size Limits
+   XCom uses PyArrow to store data in an Arrow table between tasks. However, PyArrow requires data in each column to be of a fixed type, and since the input columns included special characters, I had to remove special characters across all columns and convert them to a fixed type in       the extract step.
+   
+2. **Duplicate Handling**
+
+   <img width="1423" height="226" alt="image" src="https://github.com/user-attachments/assets/f74c19d0-d42b-4981-9782-e4a85930f92e" />
+
+When creating the dashboard in Tableau, I realized that there were duplicates in the data. Since I had already created the unique_id in the transform step, it was easier for me to check Postgres for any duplicates and then implement a constraint preventing more than one row with the same unique_id from being in the table. However, this led to failures in the Airflow runs, since my pre-existing load function simply appended to the database. From SQLAlchemy, I imported MetaData and Table so that SQLAlchemy could check my table's validation rules, and if a duplicate were to be loaded, the pre-exisitng row's values should be updated with the new data instead of inserting second row.
+
+3. **XCom Size Limits**
 Airflow's XCom is meant for small metadata payloads, not bulk data transfer. This constrained how many airports/how much history I could pass between tasks in a single DAG run, which directly shaped the decision to scope this to 3 airports (see Data Source).
 
 ## Tech Stack
